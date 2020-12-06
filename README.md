@@ -6,7 +6,9 @@
 Info:
 Balance your checkbook with ease using your smartphone or Computer.
 
-Coming Soon:
 
- * Nicer Theme
- * Fix annoying redirect after submitting transaction 
+
+THIS FORK:
+* Updated index.php to replace mysql with mysqli functions.
+* Added a logout link.
+* Included an install.php file to set config file parameters.
