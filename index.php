@@ -1,15 +1,26 @@
+<html>
+
 <?php
+
 include 'config.php';
 $username = "$webuser";
 $password = "$webpass";
 $nonsense = "$webhash";
 
-if (isset($_COOKIE['PrivatePageLogin'])) {
+	if (isset($_GET['logout'])){
+		setcookie("uid", NULL);
+		setcookie("xrc", NULL);
+			$fmsg = "You where successfully logged out. Please log in again:";
+	}
+
+
+elseif (isset($_COOKIE['PrivatePageLogin'])) {
    if ($_COOKIE['PrivatePageLogin'] == md5($password.$nonsense)) {
 ?>
 
 <html>
 <body>
+<center>
 <form action="insert.php" method="post">
 Date: <input type="date" name="date1" required>
 Description: <input type="text" name="description" required>
@@ -31,6 +42,7 @@ if (mysqli_connect_errno())
   }
 
 $result = mysqli_query($con,"SELECT * FROM $tablename");
+
 
 
 echo "<table border='1'>
@@ -62,30 +74,31 @@ mysqli_close($con);
 Your Current balance is: $
 <?php
 include 'config.php';
-$con = mysql_connect("$dbhost", "$dbuser", "$dbpassword");
+$con = mysqli_connect("$dbhost", "$dbuser", "$dbpassword","$dbname");
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
   }
 
-$db_selected = mysql_select_db("$dbname",$con);
-$sql = "SELECT SUM(Deposit) as Total FROM $tablename";
-$sql2 = "SELECT SUM(Payment) as Total FROM $tablename";
-$result = mysql_query($sql,$con);
-$result2 = mysql_query($sql2,$con);
-while ($row = mysql_fetch_array($result)) 
-while ($row2 = mysql_fetch_array($result2)) {
+
+$sql = "SELECT SUM(Deposit) FROM $tablename";
+$sql2 = "SELECT SUM(Payment) FROM $tablename";
+$result = mysqli_query($con,$sql);
+$result2 = mysqli_query($con,$sql2);
+while ($row = mysqli_fetch_array($result)) 
+while ($row2 = mysqli_fetch_array($result2)) {
 	printf ($row[0] - $row2[0]);
 }
-mysql_close($con);
+mysqli_close($con);
 ?>
-
 <html>
-</div>
-    </div>
-   <p class="text-center">Created by <a target="_blank" href="http://JohnathanMartin.com">Johnathan Martin</a>. Open Source at <a target="_blank" href="http://www.github.com/johnathanmartin/mysqlledger">Github</a>!</p>
-</div>
+<body>
+<center>
+<a href="?logout">Log out</a></body>
+</center>
+</body>
 </html>
+</center><center>
 
 <?php
       exit;
@@ -103,7 +116,7 @@ if (isset($_GET['p']) && $_GET['p'] == "login") {
       echo "Sorry, that password does not match.";
       exit;
    } else if ($_POST['user'] == $username && $_POST['keypass'] == $password) {
-      setcookie('PrivatePageLogin', md5($_POST['keypass'].$nonsense));
+      setcookie('PrivatePageLogin', md5($_POST['keypass'].$nonsense), time()+60);
       header("Location: $_SERVER[PHP_SELF]");
    } else {
       echo "Sorry, you could not be logged in at this time.";
@@ -111,8 +124,13 @@ if (isset($_GET['p']) && $_GET['p'] == "login") {
 }
 ?>
 
+<center>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?p=login" method="post">
 <label>Username: <input type="text" name="user" id="user" /></label><br />
 <label>Password: <input type="password" name="keypass" id="keypass" /></label><br />
 <input type="submit" id="submit" value="Login" />
 </form>
+
+</center>
+
+
