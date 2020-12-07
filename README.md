@@ -15,4 +15,4 @@ THIS FORK:
 
 Coming Soon:
 * Add sql automation to install
-* Added a logout link. - Found a bug.
+* A logout link. - Found a bug, removed until i can fix it.
