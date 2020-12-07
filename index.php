@@ -7,14 +7,7 @@ $username = "$webuser";
 $password = "$webpass";
 $nonsense = "$webhash";
 
-	if (isset($_GET['logout'])){
-		setcookie("uid", NULL);
-		setcookie("xrc", NULL);
-			$fmsg = "You where successfully logged out. Please log in again:";
-	}
-
-
-elseif (isset($_COOKIE['PrivatePageLogin'])) {
+if (isset($_COOKIE['PrivatePageLogin'])) {
    if ($_COOKIE['PrivatePageLogin'] == md5($password.$nonsense)) {
 ?>
 
@@ -91,14 +84,9 @@ while ($row2 = mysqli_fetch_array($result2)) {
 }
 mysqli_close($con);
 ?>
-<html>
-<body>
+
+	
 <center>
-<a href="?logout">Log out</a></body>
-</center>
-</body>
-</html>
-</center><center>
 
 <?php
       exit;
